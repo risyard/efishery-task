@@ -4,15 +4,19 @@ import (
 	"errors"
 	"log"
 
+	"github.com/efishery-task/auth-app/config"
 	"github.com/efishery-task/auth-app/repo"
 	"github.com/efishery-task/auth-app/utils"
 
+	"github.com/golang-jwt/jwt"
 	"github.com/sethvargo/go-password/password"
 )
 
 type ILogic interface {
 	AddUser(user utils.User) (psw string, err error)
 	IsUserExist(user utils.User) (bool, error)
+	GeneratePassword() (pass string, err error)
+	GenerateToken(user utils.User) (tokenString string, err error)
 }
 
 type Logic struct {
@@ -32,7 +36,7 @@ func (logic *Logic) AddUser(user utils.User) (psw string, err error) {
 		err = errors.New("Failed to check whether username exists")
 		return "", err
 	}
-	
+
 	if userExists {
 		return "", errors.New("Username duplicated")
 
@@ -76,4 +80,29 @@ func (logic *Logic) GeneratePassword() (pass string, err error) {
 	}
 
 	return pass, nil
+}
+
+func (logic *Logic) GenerateToken(user utils.User) (tokenString string, err error) {
+	userData, err := logic.Repo.GetUserByPhoneAndPassword(user.Phone, user.Password)
+	if (err != nil || userData == utils.User{}) {
+		log.Println(err)
+		err = errors.New("User not found, please check your phone number and/or password")
+		return "", err
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"name":      userData.Name,
+		"phone":     userData.Phone,
+		"role":      userData.Role,
+		"timestamp": userData.Timestampz,
+	})
+
+	tokenString, err = token.SignedString([]byte(config.Secret))
+	if err != nil {
+		log.Println(err)
+		err = errors.New("Failed to sign JWT token")
+		return "", err
+	}
+
+	return tokenString, nil
 }

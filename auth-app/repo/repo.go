@@ -14,6 +14,7 @@ import (
 type IRepo interface {
 	InsertUser(utils.User) (err error)
 	GetAllUsers() (users []utils.User, err error)
+	GetUserByPhoneAndPassword(phone, password string) (user utils.User, err error)
 }
 
 type Repo struct {
@@ -70,4 +71,21 @@ func (repo *Repo) GetAllUsers() (users []utils.User, err error) {
 	}
 
 	return users, nil
+}
+
+func (repo *Repo) GetUserByPhoneAndPassword(phone, password string) (user utils.User, err error) {
+	users, err := repo.GetAllUsers()
+	if err != nil {
+		log.Println(err)
+		err = errors.New("Failed to get all users")
+		return user, err
+	}
+
+	for _, val := range users {
+		if val.Phone == phone && val.Password == password {
+			return val, nil
+		}
+	}
+
+	return user, errors.New("Failed to find matching phone and/or password")
 }

@@ -10,6 +10,7 @@ import (
 var (
 	PORT string
 	FileName string
+	Secret string
 )
 
 func InitConfig() {
@@ -20,4 +21,5 @@ func InitConfig() {
 	
 	PORT = os.Getenv("SERVER_PORT")
 	FileName = os.Getenv("FILE_PATH")
+	Secret = os.Getenv("SECRET")
 }

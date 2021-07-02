@@ -4,6 +4,7 @@ go 1.16
 
 require (
 	github.com/ajg/form v1.5.1 // indirect
+	github.com/golang-jwt/jwt v3.2.1+incompatible
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/imkira/go-interpol v1.1.0 // indirect
 	github.com/joho/godotenv v1.3.0
