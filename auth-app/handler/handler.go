@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 
 	"github.com/efishery-task/auth-app/logic"
@@ -69,7 +70,7 @@ func (h *Handler) AddUser(ctx iris.Context) {
 
 	ctx.JSON(utils.SuccessResponse{
 		Status: 201,
-		Data:   user,
+		Data:   user.Password,
 	})
 
 }

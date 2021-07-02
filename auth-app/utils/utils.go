@@ -1,10 +1,11 @@
 package utils
 
 type User struct {
-	Name     string `json:"name"`
-	Phone    string `json:"phone"`
-	Role     string `json:"role"`
-	Password string `json:"password"`
+	Name       string `json:"name"`
+	Phone      string `json:"phone"`
+	Role       string `json:"role"`
+	Password   string `json:"password"`
+	Timestampz string `json:"timestamp"`
 }
 
 type UserResponse struct {

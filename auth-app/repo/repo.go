@@ -35,7 +35,7 @@ func (repo *Repo) InsertUser(user utils.User) (err error) {
 	timestampz := time.Now()
 	csvWriter := csv.NewWriter(file)
 	csvWriter.Write([]string{user.Name, user.Phone, user.Role, user.Password, timestampz.Format("02 Jan 06 15:04 MST")})
-	log.Println("Added user", user.Name)
+	log.Println("Added user", user.Name, "at", timestampz.Format("02 Jan 06 15:04 MST"))
 
 	csvWriter.Flush()
 
@@ -59,10 +59,11 @@ func (repo *Repo) GetAllUsers() (users []utils.User, err error) {
 	// Parse the result to new struct
 	for _, line := range lines {
 		user := utils.User{
-			Name:     line[0],
-			Phone:    line[1],
-			Role:     line[2],
-			Password: line[3],
+			Name:       line[0],
+			Phone:      line[1],
+			Role:       line[2],
+			Password:   line[3],
+			Timestampz: line[4],
 		}
 
 		users = append(users, user)
