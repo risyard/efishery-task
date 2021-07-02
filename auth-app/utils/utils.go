@@ -8,11 +8,11 @@ type User struct {
 	Timestampz string `json:"timestamp"`
 }
 
-type UserResponse struct {
-	Name     string `json:"name"`
-	Phone    string `json:"phone"`
-	Role     string `json:"role"`
-	Password string `json:"password"`
+type Claims struct {
+	Name       string `json:"name"`
+	Phone      string `json:"phone"`
+	Role       string `json:"role"`
+	Timestampz string `json:"timestamp"`
 }
 
 type SuccessResponse struct {

@@ -2,6 +2,7 @@ package logic
 
 import (
 	"errors"
+	"fmt"
 	"log"
 
 	"github.com/efishery-task/auth-app/config"
@@ -17,6 +18,7 @@ type ILogic interface {
 	IsUserExist(user utils.User) (bool, error)
 	GeneratePassword() (pass string, err error)
 	GenerateToken(user utils.User) (tokenString string, err error)
+	ParseToken(tokenString string) (claim utils.Claims, err error)
 }
 
 type Logic struct {
@@ -105,4 +107,29 @@ func (logic *Logic) GenerateToken(user utils.User) (tokenString string, err erro
 	}
 
 	return tokenString, nil
+}
+
+func (logic *Logic) ParseToken(tokenString string) (claim utils.Claims, err error) {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		return []byte(config.Secret), nil
+	})
+	if err != nil {
+		log.Println(err)
+		err = errors.New("Failed to parse JWT Token")
+		return claim, err
+	}
+
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		claim.Name = fmt.Sprintf("%v", claims["name"])
+		claim.Phone = fmt.Sprintf("%v", claims["phone"])
+		claim.Role = fmt.Sprintf("%v", claims["role"])
+		claim.Timestampz = fmt.Sprintf("%v", claims["timestamp"])
+	} else {
+		log.Println(err)
+		err = errors.New("Failed to parse private claims")
+		return claim, err
+	}
+
+	return claim, nil
+
 }

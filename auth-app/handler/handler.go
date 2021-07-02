@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"log"
+	"strings"
 
 	"github.com/efishery-task/auth-app/logic"
 	"github.com/efishery-task/auth-app/utils"
@@ -13,6 +14,7 @@ type IHandler interface {
 	Hello(ctx iris.Context)
 	AddUser(ctx iris.Context)
 	GetToken(ctx iris.Context)
+	GetClaims(ctx iris.Context)
 }
 
 type Handler struct {
@@ -75,7 +77,6 @@ func (h *Handler) AddUser(ctx iris.Context) {
 
 }
 
-
 func (h *Handler) GetToken(ctx iris.Context) {
 	var user utils.User
 
@@ -113,9 +114,31 @@ func (h *Handler) GetToken(ctx iris.Context) {
 		return
 	}
 
-
 	ctx.JSON(utils.SuccessResponse{
-		Status: 201,
+		Status: 200,
 		Data:   jwtToken,
 	})
+}
+
+func (h *Handler) GetClaims(ctx iris.Context) {
+	bearerToken := ctx.GetHeader("Authorization")
+	tempString := strings.Split(bearerToken, " ")
+
+	tokenString := tempString[1]
+	claim, err := h.Logic.ParseToken(tokenString)
+	if err != nil {
+		ctx.StatusCode(500)
+		ctx.JSON(utils.BadResponse{
+			Status:  500,
+			Message: err.Error(),
+		})
+
+		return
+	}
+
+	ctx.JSON(utils.SuccessResponse{
+		Status: 200,
+		Data:   claim,
+	})
+
 }
