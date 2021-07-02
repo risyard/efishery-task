@@ -9,6 +9,7 @@ import (
 
 var (
 	PORT string
+	FileName string
 )
 
 func InitConfig() {
@@ -16,5 +17,7 @@ func InitConfig() {
 	if err != nil {
 		log.Fatal("Error getting environment variables for config")
 	}
+	
 	PORT = os.Getenv("SERVER_PORT")
+	FileName = os.Getenv("FILE_PATH")
 }

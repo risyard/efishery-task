@@ -16,6 +16,7 @@ func main() {
 	h := handler.NewHandler()
 
 	app.Handle("GET", "/hello", h.Hello)
+	app.Handle("POST", "/user", h.AddUser)
 
 	listenPort := fmt.Sprintf(":%s", config.PORT)
 	fmt.Println("Server online!")
