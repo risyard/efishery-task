@@ -5,6 +5,7 @@ import (
 	"errors"
 	"log"
 	"os"
+	"time"
 
 	"github.com/efishery-task/auth-app/config"
 	"github.com/efishery-task/auth-app/utils"
@@ -31,8 +32,9 @@ func (repo *Repo) InsertUser(user utils.User) (err error) {
 	}
 	defer file.Close()
 
+	timestampz := time.Now()
 	csvWriter := csv.NewWriter(file)
-	csvWriter.Write([]string{user.Name, user.Phone, user.Role, user.Password})
+	csvWriter.Write([]string{user.Name, user.Phone, user.Role, user.Password, timestampz.Format("02 Jan 06 15:04 MST")})
 	log.Println("Added user", user.Name)
 
 	csvWriter.Flush()
