@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/risyard/efishery-task/fetch-app/config"
 	"github.com/risyard/efishery-task/fetch-app/handler/komoditas"
+	mw "github.com/risyard/efishery-task/fetch-app/middleware"
 )
 
 func hello(ctx *gin.Context) {
@@ -15,7 +16,8 @@ func hello(ctx *gin.Context) {
 
 func main() {
 	config.InitConfig()
-	app := gin.Default()
+	app := gin.New()
+	app.Use(mw.CheckJWTToken)
 
 	app.GET("/hello", hello)
 
