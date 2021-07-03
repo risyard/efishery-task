@@ -6,6 +6,7 @@ import (
 	"log"
 	"strconv"
 
+	"github.com/risyard/efishery-task/fetch-app/cache"
 	"github.com/risyard/efishery-task/fetch-app/model"
 	"github.com/risyard/efishery-task/fetch-app/repo/currency"
 	"github.com/risyard/efishery-task/fetch-app/repo/komoditas"
@@ -46,11 +47,17 @@ func (logic *KomoditasLogic) GetListKomoditas() (dollarListKomoditas []model.Kom
 }
 
 func (logic *KomoditasLogic) AddUSDPrice(listData []model.Komoditas) (res []model.Komoditas, err error) {
-	rate, err := logic.CurrencyRepo.GetRatio("IDR_USD")
-	if err != nil {
-		log.Println(err)
-		err = errors.New("Failed to get conversion rate")
-		return res, err
+	var rate float64
+
+	if cache.ConversionRate != 0 {
+		rate = cache.ConversionRate
+	} else {
+		rate, err = logic.CurrencyRepo.GetRatio("IDR_USD")
+		if err != nil {
+			log.Println(err)
+			err = errors.New("Failed to get conversion rate")
+			return res, err
+		}
 	}
 
 	for _, val := range listData {

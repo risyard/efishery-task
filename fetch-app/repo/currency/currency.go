@@ -26,6 +26,7 @@ func NewCurrencyRepo() ICurrencyRepo {
 func (repo *CurrencyRepo) GetRatio(ratio string) (float64, error) {
 	var rate model.CurrencyRate
 
+	log.Println("Getting conversion rate for", ratio)
 	// rasio := []byte(`{"IDR_USD":0.000069158445}`)
 
 	url := fmt.Sprintf("https://free.currconv.com/api/v7/convert?q=%s&compact=ultra&apiKey=%s", ratio, config.Key)
