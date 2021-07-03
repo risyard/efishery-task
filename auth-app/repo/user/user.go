@@ -1,4 +1,4 @@
-package repo
+package user
 
 import (
 	"encoding/csv"
@@ -8,23 +8,23 @@ import (
 	"time"
 
 	"github.com/efishery-task/auth-app/config"
-	"github.com/efishery-task/auth-app/utils"
+	"github.com/efishery-task/auth-app/model"
 )
 
-type IRepo interface {
-	InsertUser(utils.User) (err error)
-	GetAllUsers() (users []utils.User, err error)
-	GetUserByPhoneAndPassword(phone, password string) (user utils.User, err error)
+type IUserRepo interface {
+	InsertUser(model.User) (err error)
+	GetAllUsers() (users []model.User, err error)
+	GetUserByPhoneAndPassword(phone, password string) (user model.User, err error)
 }
 
-type Repo struct {
+type UserRepo struct {
 }
 
-func NewRepo() IRepo {
-	return &Repo{}
+func NewUserRepo() IUserRepo {
+	return &UserRepo{}
 }
 
-func (repo *Repo) InsertUser(user utils.User) (err error) {
+func (repo *UserRepo) InsertUser(user model.User) (err error) {
 
 	file, err := os.OpenFile(config.FileName, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
 	if err != nil {
@@ -43,7 +43,7 @@ func (repo *Repo) InsertUser(user utils.User) (err error) {
 	return nil
 }
 
-func (repo *Repo) GetAllUsers() (users []utils.User, err error) {
+func (repo *UserRepo) GetAllUsers() (users []model.User, err error) {
 
 	// Opens the csv file
 	file, err := os.Open(config.FileName)
@@ -59,7 +59,7 @@ func (repo *Repo) GetAllUsers() (users []utils.User, err error) {
 
 	// Parse the result to new struct
 	for _, line := range lines {
-		user := utils.User{
+		user := model.User{
 			Name:       line[0],
 			Phone:      line[1],
 			Role:       line[2],
@@ -73,7 +73,7 @@ func (repo *Repo) GetAllUsers() (users []utils.User, err error) {
 	return users, nil
 }
 
-func (repo *Repo) GetUserByPhoneAndPassword(phone, password string) (user utils.User, err error) {
+func (repo *UserRepo) GetUserByPhoneAndPassword(phone, password string) (user model.User, err error) {
 	users, err := repo.GetAllUsers()
 	if err != nil {
 		log.Println(err)
