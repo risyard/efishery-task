@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 
-	"github.com/efishery-task/auth-app/handler/user"
-	"github.com/efishery-task/auth-app/handler/token"
-	"github.com/efishery-task/auth-app/config"
 	"github.com/kataras/iris/v12"
+	"github.com/risyard/efishery-task/auth-app/config"
+	"github.com/risyard/efishery-task/auth-app/handler/token"
+	"github.com/risyard/efishery-task/auth-app/handler/user"
 )
 
 func main() {

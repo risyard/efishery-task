@@ -1,4 +1,4 @@
-module github.com/efishery-task/auth-app
+module github.com/risyard/efishery-task/auth-app
 
 go 1.16
 

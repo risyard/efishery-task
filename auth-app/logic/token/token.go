@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/efishery-task/auth-app/config"
-	"github.com/efishery-task/auth-app/repo/user"
-	"github.com/efishery-task/auth-app/model"
+	"github.com/risyard/efishery-task/auth-app/config"
+	"github.com/risyard/efishery-task/auth-app/model"
+	"github.com/risyard/efishery-task/auth-app/repo/user"
 
 	"github.com/golang-jwt/jwt"
 )

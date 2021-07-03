@@ -5,9 +5,9 @@ import (
 	"log"
 	"strings"
 
-	"github.com/efishery-task/auth-app/logic/token"
-	"github.com/efishery-task/auth-app/model"
 	"github.com/kataras/iris/v12"
+	"github.com/risyard/efishery-task/auth-app/logic/token"
+	"github.com/risyard/efishery-task/auth-app/model"
 )
 
 type ITokenHandler interface {

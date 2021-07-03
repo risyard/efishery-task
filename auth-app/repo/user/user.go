@@ -7,8 +7,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/efishery-task/auth-app/config"
-	"github.com/efishery-task/auth-app/model"
+	"github.com/risyard/efishery-task/auth-app/config"
+	"github.com/risyard/efishery-task/auth-app/model"
 )
 
 type IUserRepo interface {

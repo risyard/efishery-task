@@ -4,8 +4,8 @@ import (
 	"errors"
 	"log"
 
-	"github.com/efishery-task/auth-app/repo/user"
-	"github.com/efishery-task/auth-app/model"
+	"github.com/risyard/efishery-task/auth-app/model"
+	"github.com/risyard/efishery-task/auth-app/repo/user"
 
 	"github.com/sethvargo/go-password/password"
 )
