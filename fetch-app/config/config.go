@@ -8,9 +8,10 @@ import (
 )
 
 var (
-	PORT string
+	PORT     string
 	FileName string
-	Secret string
+	Secret   string
+	Key      string
 )
 
 func InitConfig() {
@@ -18,8 +19,9 @@ func InitConfig() {
 	if err != nil {
 		log.Fatal("Error getting environment variables for config")
 	}
-	
+
 	PORT = os.Getenv("SERVER_PORT")
 	FileName = os.Getenv("FILE_PATH")
 	Secret = os.Getenv("SECRET")
+	Key = os.Getenv("KEY")
 }

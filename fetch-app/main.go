@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/risyard/efishery-task/fetch-app/config"
+	"github.com/risyard/efishery-task/fetch-app/handler/komoditas"
 )
 
 func hello(ctx *gin.Context) {
@@ -17,6 +18,9 @@ func main() {
 	app := gin.Default()
 
 	app.GET("/hello", hello)
+
+	komHandler := komoditas.NewKomoditasHandler()
+	app.GET("/komoditas", komHandler.GetListKomoditas)
 
 	listenPort := fmt.Sprintf(":%s", config.PORT)
 	fmt.Println("Server online!")
