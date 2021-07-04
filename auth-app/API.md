@@ -1,11 +1,11 @@
 openapi: 3.0.0
 info:
   version: 1.0.0
-  title: Simple API
-  description: A simple API to illustrate OpenAPI concepts
+  title: Auth-App
+  description: A simple collections of API for auth-app 
 
 servers:
-  - url: https://example.io/v1
+  - url: http://localhost:8080/
 
 components:
   securitySchemes:
