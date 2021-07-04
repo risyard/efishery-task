@@ -38,6 +38,7 @@ then to run the container based on the image, execute these after the image is b
 ```
 $ docker run -d -p <host port>:<docker port> <image-name>
 ```
+`-d` means the docker will run detached/in background and `-p` means the docker will publish and listen to those port
 ### Auth-App Summary
 Auth-App has 4 endpoints that can be accessed. 
 * GET `/hello` 
@@ -107,7 +108,7 @@ To set up the application, you need to have `docker` installed in your machine o
 * `KEY` to be used when getting currency conversion rate from https://free.currencyconverterapi.com.
     * You need to register and verify your email first on the free plan to get the API Key
 * `CACHE_DURATION` to define how long before the cache need to be updated
-    * The number that is set will be counted in `minute` (ie. `CACHE_DURATION=45` means the cache will be updated after 45 minutes from the app is started)
+    * The number that is set will be counted in `minute` (ie. `CACHE_DURATION=45` means the cache will be updated every 45 minutes after the app is started)
     * Based on the documentation on https://free.currencyconverterapi.com, the currency conversion rate is updated at 60 minutes interval, therefore the default value for this configuration is `60`
 
 
@@ -276,3 +277,4 @@ $ docker build -t fetch-app .
 $ docker run -d -p 3000:3000 fetch-app
 $ curl localhost:3000/hello
 ```
+`-d` means the docker will run detached/in background and `-p` means the docker will publish and listen to those port
