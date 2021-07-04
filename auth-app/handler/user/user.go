@@ -67,6 +67,7 @@ func (h *UserHandler) AddUser(ctx iris.Context) {
 
 	user.Password = psw
 
+	ctx.StatusCode(201)
 	ctx.JSON(model.SuccessResponse{
 		Status: 201,
 		Data:   user.Password,
