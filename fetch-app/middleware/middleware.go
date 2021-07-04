@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"strings"
 
@@ -30,7 +31,7 @@ func CheckJWTToken(ctx *gin.Context) {
 
 		ctx.Abort()
 		return
-	} 
+	}
 
 	if !token.Valid {
 		ctx.JSON(403, model.BadResponse{
@@ -40,7 +41,55 @@ func CheckJWTToken(ctx *gin.Context) {
 
 		ctx.Abort()
 		return
-	} 
+	}
+
+	ctx.Next()
+}
+
+func CheckJWTTokenAdmin(ctx *gin.Context) {
+	var claim model.Claims
+
+	bearerToken := ctx.GetHeader("Authorization")
+	tokenString := strings.Split(bearerToken, " ")
+
+	token, err := jwt.Parse(tokenString[1], func(token *jwt.Token) (interface{}, error) {
+		return []byte(config.Secret), nil
+	})
+	if err != nil {
+		log.Println(err)
+		err = errors.New("Failed to parse JWT Token/Invalid JWT Token")
+
+		ctx.JSON(500, model.BadResponse{
+			Status:  500,
+			Message: err.Error(),
+		})
+
+		ctx.Abort()
+		return
+	}
+
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		claim.Role = fmt.Sprintf("%v", claims["role"])
+	} else {
+		log.Println(err)
+		err = errors.New("Failed to parse private claims")
+		ctx.JSON(500, model.BadResponse{
+			Status:  500,
+			Message: err.Error(),
+		})
+
+		ctx.Abort()
+		return
+	}
+
+	if claim.Role != "admin" {
+		log.Println(err)
+		err = errors.New("Invalid role")
+		ctx.JSON(403, model.BadResponse{
+			Status:  403,
+			Message: err.Error(),
+		})
+	}
 
 	ctx.Next()
 }

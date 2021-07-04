@@ -25,15 +25,14 @@ func main() {
 	go cacheWorker.StartWorker(cacheTimer)
 	
 	app := gin.New()
-	app.Use(mw.CheckJWTToken)
 
 	app.GET("/hello", hello)
 
 	komHandler := komoditas.NewKomoditasHandler()
-	app.GET("/komoditas", komHandler.GetListKomoditas)
+	app.GET("/komoditas", mw.CheckJWTToken, komHandler.GetListKomoditas)
 
 	tokenHandler := token.NewTokenHandler()
-	app.GET("/claims", tokenHandler.GetClaims)
+	app.GET("/claims", mw.CheckJWTToken, tokenHandler.GetClaims)
 
 	listenPort := fmt.Sprintf(":%s", config.PORT)
 	fmt.Println("Server online!")
