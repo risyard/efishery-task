@@ -45,6 +45,10 @@ func (repo *CurrencyRepo) GetRatio(ratio string) (float64, error) {
 		log.Println(err)
 		err = errors.New("Failed to parse conversion rate data")
 		return 0, err
+	} else if rate.Ratio == 0 {
+		log.Println("Conversion Rate is 0!")
+		err = errors.New("Failed to get conversion rate data")
+		return 0, err
 	}
 
 	return rate.Ratio, nil
