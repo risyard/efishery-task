@@ -5,11 +5,13 @@ This repo is the submission for efishery backend engineer skill test
 	* [Setup](#auth-app-setup)
 	* [Build & Run](#auth-app-build-and-run)
 	* [Summary](#auth-app-summary)
+    * [System Design](#auth-app-system-design)
 	* [Examples](#auth-app-examples)
 * [Fetch-App](#fetch-app)
 	* [Setup](#fetch-app-setup)
 	* [Build & Run](#fetch-app-build-and-run)
 	* [Summary](#fetch-app-summary)
+    * [System Design](#fetch-app-system-design)
 	* [Examples](#fetch-app-examples)
 
 ## Auth-App
@@ -90,6 +92,30 @@ Authorization: Bearer <JWT>
 		"timestamp": "04 Jul 21 09:07 UTC"
 	}
 }
+```
+
+### Auth-App System Design
+``` 
+Using kataras/iris Golang Web Framework
+
+              HTTP Response
+                    A
+                    |
+                    |
+HTTP Request ---> Handler <---> Logic <---> Repo <---> Database
+              1            2          3         4
+            (Model)     (Model)    (Model)    (Model)
+
+1. HTTP Request is parsed and assigned into a context variable which will be handled by Handler functions.
+    a. Handler will parse the request body and header and assign those values to variables/struct which is taken from the 'model' package that is shared through all levels/layers of functions.
+    b. Handler will also return an HTTP Response after processing the received/parsed data. Whether it's an error/failed or successful process.
+    c. Handler will only handle request parsing, response, auth, and user/client communication related task.
+2. Handler will calls Logic functions that will do data processing with the parsed values from request in variables/struct from 'model' package as the functions parameters.
+    a. Logic functions will only do data processing. All the data needed for the process are either given by Handler as parameters or fetched by Repo functions from Database
+    b. Logic functions can also be a private functions that can only be called internally in the package. These functions function to help processing the data and will not be called nor return values to Handler.
+3. Logic will calls Repo functions to fetch more data that is needed for the process
+4. Repo will fetch data from all external sources, in this case a database. It will fetch the data and parse them and return them before returning the parsed data to Logic.
+    a. Since Auth-App is using a csv file for the database, most of Repo functions are built to read and write a csv formatted file.                       
 ```
 ### Auth-App Example
 ```
@@ -269,6 +295,35 @@ Authorization: Bearer <JWT>
         ...
     ]
 }
+```
+### Fetch-App System Design
+``` 
+Using Gin Golang Web Framework
+Using memory/RAM based cache
+Using goroutines based worker
+
+                        HTTP Response                 Cache
+                              A                         A
+                              |                         |
+                              |                         V
+HTTP Request ---> Middleware ---> Handler <---> Logic <---> Repo <---> External Data Sources
+              1               2             3           4          5
+            (Model)        (Model)       (Model)     (Model)    (Model)
+
+1. HTTP Request will be validated and authorized by the Middleware before be forwarded to Handler. Especially the JWT inside the header request.
+    a. Failure on validating or authorizing HTTP Request will make Middleware to return an HTTP Response to user/client instead of Handler.
+2. HTTP Request is parsed and assigned into a context variable which will be handled by Handler functions.
+    a. Handler will parse the request body and header and assign those values to variables/struct which is taken from the 'model' package that is shared through all levels/layers of functions.
+    b. Handler will also return an HTTP Response after processing the received/parsed data. Whether it's an error/failed or successful process.
+    c. Handler will only handle request parsing, response, auth, and user/client communication related task.
+3. Handler will calls Logic functions that will do data processing with the parsed values from request in variables/struct from 'model' package as the functions parameters.
+    a. Logic functions will only do data processing. All the data needed for the process are either given by Handler as parameters or fetched by Repo functions from Database.
+    b. Logic functions can also be a private functions that can only be called internally in the package. These functions function to help processing the data and will not be called nor return values to Handler.
+4. Logic will calls Repo functions to fetch more data that is needed for the process.
+    a. Logic will try to get the data from the cache first before calling Repo functions.
+    b. There is a worker that will call Repo functions to get all the needed data and store it to the cache at some interval.
+5. Repo will fetch data from all external sources, in this case an external HTTP server that hosts the data. It will fetch the data and parse them and return them before returning the parsed data to Logic.
+    a. Fetch-App is getting data from an external HTTP server. Therefore, most of the Repo functions are built to send HTTP requests to the server and parse the response for the data before returning the data to the function that calls it.                       
 ```
 ### Fetch-App Example
 ```
