@@ -39,7 +39,7 @@ paths:
       description: Get list of clean commodities data with additional USD currency for its price 
       response:
         '200':
-          description: Created!
+          description: OK!
           content:
             application/json:
               schema:
@@ -97,22 +97,9 @@ paths:
         default:
           description: Unregistered error/response
 
-  /token:
+  /komoditas/compiled:
     get:
-      description: Generate JWT Token for stored user with correct phone number and password
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-                properties:
-                  phone:
-                    type: string
-                    description: User's phone number
-                  password:
-                    type: string
-                    description: User's password
+      description: Get list of aggregated and clean commodities data based on area_province and weekly data with max, min, avg, median of data 
       response:
         '200':
           description: OK!
@@ -125,8 +112,27 @@ paths:
                     type: integer
                     description: Response status code
                   data:
-                    type: string
-                    description: Related user JWT Token
+                    type: array
+                    description: List of all commodities data with additional USD currency for its price
+                    properties:
+                        area_provinsi:
+                          type: string
+                          description: Commodity sell area, province level
+                        profit: 
+                          type: map[string, map[string, int]]
+                          description: Contains all profits (price * size) at Nth week of the year for it's province (map[tahun, map[minggu, price*size]])
+                        max_profit:
+                          type: float
+                          description: highest weekly profit of the province 
+                        min_profit:
+                          type: float
+                          description: lowest weekly profit of the province
+                        avg_profit:
+                          type: float
+                          description: average weekly profit of the province
+                        median_profit:
+                          type: float
+                          description: median of weekly profit of the province
         
         '500'
           description: Internal Server Error!
@@ -141,6 +147,8 @@ paths:
                   message:
                     type: string
                     description: Error Message
+        default:
+          description: Unregistered error/response
 
   /claims:
     get:
