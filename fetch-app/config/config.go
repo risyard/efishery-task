@@ -10,7 +10,6 @@ import (
 
 var (
 	PORT          string
-	FileName      string
 	Secret        string
 	Key           string
 	CacheDuration int
@@ -23,7 +22,6 @@ func InitConfig() {
 	}
 
 	PORT = os.Getenv("SERVER_PORT")
-	FileName = os.Getenv("FILE_PATH")
 	Secret = os.Getenv("SECRET")
 	Key = os.Getenv("KEY")
 	CacheDuration, _ = strconv.Atoi(os.Getenv("CACHE_DURATION"))

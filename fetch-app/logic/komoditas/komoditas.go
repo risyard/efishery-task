@@ -1,7 +1,6 @@
 package komoditas
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
@@ -162,9 +161,6 @@ func (logic *KomoditasLogic) GetCompiledKomoditas() (res []model.KomData, err er
 
 		result = append(result, data)
 	}
-
-	hasil, _ := json.Marshal(result)
-	fmt.Println(string(hasil))
 
 	return result, nil
 }
