@@ -10,6 +10,7 @@ import (
 
 type IKomoditasHandler interface {
 	GetListKomoditas(ctx *gin.Context)
+	GetCompiledKomoditas(ctx *gin.Context)
 }
 
 type KomoditasHandler struct {
@@ -24,6 +25,23 @@ func NewKomoditasHandler() IKomoditasHandler {
 
 func (h *KomoditasHandler) GetListKomoditas(ctx *gin.Context) {
 	listKomoditas, err := h.KomLogic.GetListKomoditas()
+	if err != nil {
+		ctx.JSON(500, model.BadResponse{
+			Status:  500,
+			Message: err.Error(),
+		})
+
+		return
+	}
+
+	ctx.JSON(http.StatusOK, model.SuccessResponse{
+		Status: 200,
+		Data:   listKomoditas,
+	})
+}
+
+func (h *KomoditasHandler) GetCompiledKomoditas(ctx *gin.Context) {
+	listKomoditas, err := h.KomLogic.GetCompiledKomoditas()
 	if err != nil {
 		ctx.JSON(500, model.BadResponse{
 			Status:  500,

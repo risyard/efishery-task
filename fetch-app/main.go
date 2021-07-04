@@ -30,6 +30,7 @@ func main() {
 
 	komHandler := komoditas.NewKomoditasHandler()
 	app.GET("/komoditas", mw.CheckJWTToken, komHandler.GetListKomoditas)
+	app.GET("/komoditas/compiled", mw.CheckJWTTokenAdmin, komHandler.GetCompiledKomoditas)
 
 	tokenHandler := token.NewTokenHandler()
 	app.GET("/claims", mw.CheckJWTToken, tokenHandler.GetClaims)
