@@ -29,6 +29,8 @@ There are 2 ways to run the app after the configuration values for the app is se
 First method is to run the application directly in local machine by using :
 ```
 $ cd auth-app
+$ go mod tidy
+// run 'go get xxx' if needed to pull the needed library/package
 $ go run main.go
 ```
 The other method is to build this app docker image and run a container based on the image. To build the image, execute these in your machine :
@@ -143,6 +145,8 @@ There are 2 ways to run the app after the configuration values for the app is se
 First method is to run the application directly in local machine by using :
 ```
 $ cd fetch-app
+$ go mod tidy
+// run 'go get xxx' if needed to pull the needed library/package
 $ go run main.go
 ```
 The other method is to build this app docker image and run a container based on the image. To build the image, execute these in your machine :
