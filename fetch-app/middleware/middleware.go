@@ -15,6 +15,19 @@ import (
 
 func CheckJWTToken(ctx *gin.Context) {
 	bearerToken := ctx.GetHeader("Authorization")
+	if bearerToken == "" {
+		err := errors.New("JWT Token not found in Authorization header")
+		log.Println(err)
+
+		ctx.JSON(401, model.BadResponse{
+			Status:  401,
+			Message: err.Error(),
+		})
+
+		ctx.Abort()
+		return
+	}
+
 	tokenString := strings.Split(bearerToken, " ")
 
 	token, err := jwt.Parse(tokenString[1], func(token *jwt.Token) (interface{}, error) {
@@ -34,8 +47,8 @@ func CheckJWTToken(ctx *gin.Context) {
 	}
 
 	if !token.Valid {
-		ctx.JSON(403, model.BadResponse{
-			Status:  403,
+		ctx.JSON(401, model.BadResponse{
+			Status:  401,
 			Message: "Invalid JWT Token",
 		})
 
@@ -50,6 +63,19 @@ func CheckJWTTokenAdmin(ctx *gin.Context) {
 	var claim model.Claims
 
 	bearerToken := ctx.GetHeader("Authorization")
+	if bearerToken == "" {
+		err := errors.New("JWT Token not found in Authorization header")
+		log.Println(err)
+
+		ctx.JSON(401, model.BadResponse{
+			Status:  401,
+			Message: err.Error(),
+		})
+
+		ctx.Abort()
+		return
+	}
+
 	tokenString := strings.Split(bearerToken, " ")
 
 	token, err := jwt.Parse(tokenString[1], func(token *jwt.Token) (interface{}, error) {
@@ -85,8 +111,8 @@ func CheckJWTTokenAdmin(ctx *gin.Context) {
 	if claim.Role != "admin" {
 		log.Println(err)
 		err = errors.New("Invalid role")
-		ctx.JSON(403, model.BadResponse{
-			Status:  403,
+		ctx.JSON(401, model.BadResponse{
+			Status:  401,
 			Message: err.Error(),
 		})
 	}
