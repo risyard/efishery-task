@@ -9,6 +9,7 @@ import (
 	"github.com/risyard/efishery-task/fetch-app/cache"
 	"github.com/risyard/efishery-task/fetch-app/config"
 	"github.com/risyard/efishery-task/fetch-app/handler/komoditas"
+	"github.com/risyard/efishery-task/fetch-app/handler/token"
 	mw "github.com/risyard/efishery-task/fetch-app/middleware"
 )
 
@@ -30,6 +31,9 @@ func main() {
 
 	komHandler := komoditas.NewKomoditasHandler()
 	app.GET("/komoditas", komHandler.GetListKomoditas)
+
+	tokenHandler := token.NewTokenHandler()
+	app.GET("/claims", tokenHandler.GetClaims)
 
 	listenPort := fmt.Sprintf(":%s", config.PORT)
 	fmt.Println("Server online!")
